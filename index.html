@@ -8,58 +8,119 @@
 </script>
   <style>
     #gameArea{
-        background-color: blue;
-        background: #eaeaed;
+        background: transparent;
         height: auto;
         position: relative;
         margin: 20px 100px;
         padding: 10px;
         border-style: solid;
-        border-color: crimson;
+        border-color: black;
         width: 500px;
         text-align: center;
+        overflow: auto;
       }
-    gridBoxes{
-      border-style:solid;
+    .form{
+        margin: auto;
+        width: auto;
+        text-align: center
+      }
+    h1, button{
+      margin: 20px;
+      width: auto;
+      text-align: center;
+      }
+    body {
+      background-color: #808080;
+      background-image: url("http://s.newsweek.com/sites/www.newsweek.com/files/styles/lg/public/2016/05/25/saudi-arabia-cat-ban.jpg");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
     }
     </style>
-</head>
 
+</head>
 <body>
 
-<h1>'Sketch-Pad'</h1>
+<h1>Sketch-Pad</h1>
 
 <div class="form">
-  <label for="guessField">Enter a guess: </label>
-  <input type="text" id="guessField" class="guessField">
-  <input type="submit" value="Submit guess" class="guessSubmit">
+  <button onclick="resetGrid()">Resize Grid</button>
+  <button onclick="rainbowMode()">Rainbow Mode</button>
+  <button onclick="eraserMode()">Eraser Mode</button>
 </div>
 
 <!--Space where I add all the squares-->
 <div id='gameArea'>
-<h1>Game Area</h1>
 </div>
 
 
 
 <script>
-var input = 16
+
+
+var input = 32
 var numSquares = input * input
+var widthCalc = 500/input;
+var place = $('#gameArea');
+var pixels = $('.gridBoxes');
 $(document).ready(function(){
 
-  for (i = 0; i < numSquares; i++) {
-    $('#gameArea').append("<div class='gridBoxes'></div>");
-    var widthCalc = 500/input;
-    $(".gridBoxes").css({'background-color': 'red', 'display': 'inline-block', 'width': widthCalc + 4, height: widthCalc, margin: '-2px', border: 'none', padding: '-5px'});
-$('.gridBoxes').mouseout(function(){
-  $(this).css('background-color','black');
-})
 
 
-  }
+for (i = 0; i < numSquares; i++) {
+    place.append("<div class='gridBoxes'></div>");
+};
+
+$('.gridBoxes').css({'border-style': 'solid', 'background-color': 'grey', 'float': 'left', 'clear': 'inherit', 'width': widthCalc, 'height': widthCalc, 'margin': 'none', 'border': 'none', 'padding': 'none'});
+
+
+$(".gridBoxes").mouseover(function(){
+    $(this).css("background-color", "white");
 });
 
 
+
+});
+
+//Resets the game and resizes to new size
+function resetGrid() {
+  var size = prompt('Enter the size of grid you want:', '16 - 100ish');
+  //remove all divs
+  $('.gridBoxes').remove();
+  //re add them all
+  var width = 500/size;
+  var newGrid = size * size;
+  for (i = 0; i < newGrid; i++) {
+      place.append("<div class='gridBoxes'></div>");
+  };
+  $('.gridBoxes').css({'border-style': 'solid', 'background-color': 'grey', 'float': 'left', 'clear': 'inherit', 'width': width, 'height': width, 'margin': 'none', 'border': 'none', 'padding': 'none'});
+  $(".gridBoxes").mouseover(function(){
+      $(this).css("background-color", "white");
+  });
+}
+
+//Rainbow mode
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+function rainbowMode() {
+  $('.gridBoxes').off()
+  $('.gridBoxes').mouseover(function(){
+    $(this).css({'background-color': getRandomColor(), opacity: '1'});
+  });
+}
+// Eraser mode
+function eraserMode() {
+  $('.gridBoxes').off()
+  $('.gridBoxes').mouseover(function(){
+    $(this).css('opacity', '+=-.2');
+  });
+}
 </script>
 </body>
 </html>
